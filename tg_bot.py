@@ -1,3 +1,4 @@
+import os
 import asyncio
 import datetime
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -7,11 +8,15 @@ import pandas as pd
 import yfinance as yf
 
 # ==========================================
-# ⚙️ 核心設定區
+# ⚙️ 核心設定區 (安全改版)
 # ==========================================
-BOT_TOKEN = "YOUR_TELEGRAM_BOT_TOKEN"
-API_URL = f"https://api.telegram.org/bot{BOT_TOKEN}"
+# 這樣寫代表：程式碼在 GitHub 上是乾淨的，金鑰會從 Render 雲端後台安全注入
+BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 
+if not BOT_TOKEN:
+    print("❌ 警告：未在環境變數中偵測到 TELEGRAM_BOT_TOKEN！")
+
+API_URL = f"https://api.telegram.org/bot{BOT_TOKEN}"
 
 # ==========================================
 # 📊 數據下載與關鍵價計算邏輯
